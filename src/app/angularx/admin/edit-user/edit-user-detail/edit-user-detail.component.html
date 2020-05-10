@@ -1,0 +1,271 @@
+<div align="center">
+
+    <!-- NAME SECTION -->
+    <div class="detail-wrapper mat-elevation-z5" *ngIf="action == 'name'">
+
+        <h2 class="mat-h2" style="text-align: left;">Edit Name</h2>
+
+        <form #nameForm="ngForm" (ngSubmit)="updateNameData(nameForm)">
+            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+                <mat-label>First Name</mat-label>
+                <input matInput [ngModel]="userData.firstName" name="firstName" pattern="[a-zA-Z ]*">
+                <mat-error *ngIf="nameForm.controls.firstName?.errors">Invalid first name.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+                <mat-label>Last Name</mat-label>
+                <input matInput [ngModel]="userData.lastName" name="lastName" pattern="[a-zA-Z ]*">
+                <mat-error *ngIf="nameForm.controls.lastName?.errors">Invalid first name.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+                <mat-label>Display Name</mat-label>
+                <input matInput [ngModel]="userData.displayName" name="displayName" pattern="[a-zA-Z ]*">
+                <mat-error *ngIf="nameForm.controls.displayName?.errors">Invalid display name.</mat-error>
+            </mat-form-field>
+
+            <button mat-button (click)="cancel($event)" [disabled]="isSubmitting">Cancel</button>
+            <span style="display: inline-block; width: 25px;"></span>
+            <button mat-flat-button color="accent"
+                [disabled]="nameForm.form.status === 'INVALID' || nameForm.form.pristine || isSubmitting">
+                <span *ngIf="isSubmitting">Saving</span>
+                <span *ngIf="!isSubmitting">Save</span>
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- EMAIL SECTION -->
+    <div class="detail-wrapper mat-elevation-z5" *ngIf="action == 'email'">
+
+        <h2 class="mat-h2" style="text-align: left;">Edit Email</h2>
+
+        <form #emailForm="ngForm" (ngSubmit)="updateEmailData(emailForm)">
+            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+                <mat-label>Email</mat-label>
+                <input type="email" matInput [ngModel]="userData.email" name="email" email required>
+                <mat-error *ngIf="emailForm.controls.email?.errors">Invalid email.</mat-error>
+            </mat-form-field>
+
+            <button mat-button (click)="cancel($event)" [disabled]="isSubmitting">Cancel</button>
+            <span style="display: inline-block; width: 25px;"></span>
+            <button mat-flat-button color="accent"
+                [disabled]="emailForm.form.status === 'INVALID' || emailForm.form.pristine || isSubmitting">
+                <span *ngIf="isSubmitting">Saving</span>
+                <span *ngIf="!isSubmitting">Save</span>
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- PHONE NUMBER SECTION -->
+    <div class="detail-wrapper mat-elevation-z5" *ngIf="action == 'phoneNumber'">
+
+        <h2 class="mat-h2" style="text-align: left;">Edit Phone Number</h2>
+
+        <form #phoneNumberForm="ngForm" (ngSubmit)="updatePhoneNumberData(phoneNumberForm)">
+            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+                <mat-label>Phone Number</mat-label>
+                <input type="tel" matInput ngxInput phoneFormat="(***) ***-****" [ngModel]="toPhoneDisplayFormat(userData.phoneNumber)"
+                    name="phoneNumber" required pattern="\(\d{3}\)\040\d{3}-\d{4}">
+                <mat-error *ngIf="phoneNumberForm.controls.phoneNumber?.errors">Phone number should be in (xxx) xxx-xxxx format.</mat-error>
+            </mat-form-field>
+
+            <button mat-button (click)="cancel($event)" [disabled]="isSubmitting">Cancel</button>
+            <span style="display: inline-block; width: 25px;"></span>
+            <button mat-flat-button color="accent"
+                [disabled]="phoneNumberForm.form.status === 'INVALID' || phoneNumberForm.form.pristine || isSubmitting">
+                <span *ngIf="isSubmitting">Saving</span>
+                <span *ngIf="!isSubmitting">Save</span>
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- DOB SECTION -->
+    <div class="detail-wrapper mat-elevation-z5" *ngIf="action == 'dob'">
+
+        <h2 class="mat-h2" style="text-align: left;">Date of Birth</h2>
+
+        <form #dobForm="ngForm" (ngSubmit)="updateDOBData(dobForm)">
+            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+                <mat-label>Pick a Date</mat-label>
+                <input matInput [matDatepicker]="dob" (focus)="dob.open()" (click)="dob.open()" readonly [ngModel]="userData.dob" name="dob" date #dobInput>
+                <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                <mat-datepicker #dob disabled="false"></mat-datepicker>
+                <mat-error *ngIf="dobForm.controls.dob?.errors">Invalid Date format.</mat-error>
+            </mat-form-field>
+
+            <button mat-button (click)="cancel($event)" [disabled]="isSubmitting">Cancel</button>
+            <span style="display: inline-block; width: 25px;"></span>
+            <button mat-flat-button color="accent"
+                [disabled]="dobInput.value.length === 0 || isSubmitting"
+                (click)="removeDOB(dobForm); $event.preventDefault();">
+                Remove Date of Birth
+            </button>
+            <span style="display: inline-block; width: 25px;"></span>
+            <button mat-flat-button color="accent"
+                [disabled]="dobForm.form.status === 'INVALID' || dobForm.form.pristine || isSubmitting">
+                <span *ngIf="isSubmitting">Saving</span>
+                <span *ngIf="!isSubmitting">Save</span>
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- PHOTO URL SECTION -->
+    <div class="detail-wrapper mat-elevation-z5" *ngIf="action == 'photoURL'">
+
+        <h2 class="mat-h2" style="text-align: left;">Photo URL</h2>
+
+        <mat-grid-list cols="8" rowHeight="300">
+
+            <!-- Photo Preview -->
+            <mat-grid-tile [colspan]="2" [rowspan]="1">
+                <div mat-card-avatar [style.background]="'url(' + userData.photoURL + ')'"></div>
+            </mat-grid-tile>
+
+            <!-- Photo Upload -->
+            <mat-grid-tile [colspan]="6" [rowspan]="1">
+                <form #photoURLForm="ngForm" (ngSubmit)="updatePhotoURLData(photoURLForm)" style="text-align: center;">
+
+                    <mat-tab-group>
+
+                        <!-- Upload Tab -->
+                        <mat-tab label="Upload a Photo">
+                            <p *ngIf="tempLocation.length > 0">C:/fakepath/{{ tempLocation }}</p>
+                            <p *ngIf="tempLocation.length > 0"><mat-progress-bar mode="determinate" [value]="uploadingProgress" color="accent"></mat-progress-bar></p>
+                            <input type="file" hidden #photoFile (change)="onFileSelected($event, photoURLForm)" accept="image/x-png,image/gif,image/jpeg,image/jpg">
+                            <p><button mat-flat-button color="accent" [disabled]="isUploading" (click)="openUploadDialog($event)">Select a File</button></p>
+                        </mat-tab>
+
+                        <!-- Enter URL Tab -->
+                        <mat-tab label="Enter a Photo URL">
+                            <mat-hint><div align="left">Photo URL must include http/https and only .PNG, .JPG, .JPEG or .GIF only is accepted.</div></mat-hint>
+                            <br>
+                            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+                                <mat-label>Photo URL</mat-label>
+                                <input matInput [(ngModel)]="userData.photoURL" name="photoURL" pattern="(http(s?):)(\/\/).*(?:jpg|gif|png|jpeg).*">
+                                <mat-error *ngIf="photoURLForm.controls.photoURL?.errors">Invalid photo URL format.</mat-error>
+                            </mat-form-field>
+                        </mat-tab>
+
+                    </mat-tab-group>
+
+                    <button mat-button (click)="cancel($event)" [disabled]="isSubmitting">Cancel</button>
+                    <span style="display: inline-block; width: 25px;"></span>
+                    <button mat-flat-button color="accent"
+                        [disabled]="photoURLForm.form.status === 'INVALID' || photoURLForm.form.pristine || isSubmitting || isUploading">
+                        <span *ngIf="isSubmitting">Saving</span>
+                        <span *ngIf="!isSubmitting">Save</span>
+                    </button>
+
+                </form>
+            </mat-grid-tile>
+
+        </mat-grid-list>
+
+    </div>
+
+    <!-- CUSTOM INFO SECTION -->
+    <div class="detail-wrapper mat-elevation-z5" *ngIf="action == 'custom'">
+
+        <h2 class="mat-h2" style="text-align: left;">Edit Custom Fields</h2>
+
+        <form #customForm="ngForm" (ngSubmit)="updateCustomData(customForm)" style="max-width: 800px;">
+
+            <div *ngFor="let field of customFields; let i = index">
+
+                <!-- ROW START -->
+                <div [hidden]="field.type === 'delete'" style="display: flex; padding: 5px;">
+
+                    <mat-form-field appearance="outline" style="flex: 7; margin: 5px;" color="accent">
+                        <mat-label>Field Name <span *ngIf="field.original !== false">(not editable)</span></mat-label>
+                        <input class="readOnlyControl"  matInput [ngModel]="field.key" [name]="'fieldName_' + i"
+                            pattern="[a-zA-Z\.@\-_\d]*" (ngModelChange)="validateKeyInput(i, customForm)" [readonly]="field.original !== false">
+                        <mat-error *ngIf="customForm.controls['fieldName_' + i]?.hasError('pattern')">Can only contain alphabetical characters, number,  dot (.), dash (-) underscore (_) and at (@).</mat-error>
+                        <mat-error *ngIf="customForm.controls['fieldName_' + i]?.hasError('fieldKeyChanged')">You are not allowed to edit existing field key.</mat-error>
+                    </mat-form-field>
+
+                    <!-- VALUE FIELDS -->
+
+                    <!-- Regular field value -->
+                    <mat-form-field appearance="outline" style="flex: 7; margin: 5px;" color="accent" *ngIf="['string', 'null'].includes(field.type)">
+                        <mat-label>Field Value</mat-label>
+                        <input class="readOnlyControl" matInput [ngModel]="field.value === null ? 'null' : field.value" [name]="'fieldValue_' + i" [readonly]="field.readOnly">
+                    </mat-form-field>
+
+                    <!-- Number value -->
+                    <mat-form-field appearance="outline" style="flex: 7; margin: 5px;" color="accent" *ngIf="['number'].includes(field.type)">
+                        <mat-label>Field Value</mat-label>
+                        <input matInput [ngModel]="field.value" [name]="'fieldNumberValue_' + i" (ngModelChange)="validateNumberInput(i, customForm)">
+                        <mat-error *ngIf="customForm.controls['fieldNumberValue_' + i]?.hasError('pattern')">Invalid number format.</mat-error>
+                    </mat-form-field>
+
+                    <!-- Boolean field value-->
+                    <mat-form-field appearance="outline" style="flex: 7; margin: 5px;" color="accent" *ngIf="['boolean'].includes(field.type)">
+                        <mat-label>Field Value</mat-label>
+                        <mat-select [(ngModel)]="field.value" [name]="'fieldBooleanValue_' + i">
+                            <mat-option [value]="true">true</mat-option>
+                            <mat-option [value]="false">false</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <!-- Timestamp field -->
+                    <mat-form-field class="mat-form-field-infix-control" appearance="outline" style="flex: 4; margin: 5px;" color="accent" *ngIf="['timestamp'].includes(field.type)">
+                        <mat-label>Date</mat-label>
+                        <input matInput [matDatepicker]="timestampDatePicker" (focus)="timestampDatePicker.open()" (click)="timestampDatePicker.open()"
+                                readonly [ngModel]="field.value" [name]="'timestampDatePicker_' + i" date #timestampDatePickerInput
+                                [required]="['timestamp'].includes(field.type)">
+                        <mat-datepicker-toggle matSuffix [for]="timestampDatePicker"></mat-datepicker-toggle>
+                        <mat-datepicker #timestampDatePicker disabled="false"></mat-datepicker>
+                        <mat-error *ngIf="customForm.controls['timestampDatePicker_' + i]?.errors">Invalid date format.</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="mat-form-field-infix-control" appearance="outline" style="flex: 3; margin: 5px;" color="accent" *ngIf="['timestamp'].includes(field.type)">
+                        <mat-label>Time</mat-label>
+                        <input matInput [ngxTimepicker]="timestampTimePicker" [ngModel]="getTimeFromDateObject(field.value)"
+                                readonly [name]="'timestampTimePicker_' + i" date pattern="^\d{1,2}:\d{1,2} (AM|PM)$"
+                                [required]="['timestamp'].includes(field.type)">
+                        <ngx-material-timepicker #timestampTimePicker [defaultTime]="getTimeFromDateObject(field.value)"></ngx-material-timepicker>
+                        <mat-error *ngIf="customForm.controls['timestampTimePicker_' + i]?.errors">Invalid time format.</mat-error>
+                    </mat-form-field>
+
+                    <!-- END VALUE FIELDS -->
+
+                    <mat-form-field appearance="outline" style="flex: 3; margin: 5px;" color="accent">
+                        <mat-label>Type</mat-label>
+                        <mat-select [(ngModel)]="field.type" (selectionChange)="selectValueType(i, $event.value, customForm)" [name]="'fieldValueType_' + i">
+                            <mat-option *ngFor="let value of ObjectKeys(valueTypeTemplate)" [value]="value">
+                                {{ valueTypeTemplate[value] }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div style="flex: 1; margin: 5px; display: flex; height: 60px; align-items: center;">
+                        <button mat-icon-button (click)="removeCustomField(i, customForm); $event.preventDefault();">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div> <!-- ROW END -->
+
+            </div>
+
+            <button mat-button (click)="cancel($event)" [disabled]="isSubmitting">Cancel</button>
+            <span style="display: inline-block; width: 25px;"></span>
+            <a mat-button (click)="addCustomField(customForm)" [disabled]="isSubmitting">Add Field</a>
+            <span style="display: inline-block; width: 25px;"></span>
+            <button mat-flat-button color="accent"
+                [disabled]="customForm.form.status === 'INVALID' || customForm.form.pristine || isSubmitting">
+                <span *ngIf="isSubmitting">Saving</span>
+                <span *ngIf="!isSubmitting">Save</span>
+            </button>
+
+        </form>
+
+    </div>
+
+</div>

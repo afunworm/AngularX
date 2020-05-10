@@ -1,0 +1,22 @@
+@import '~@angular/material/theming';
+@include mat-core();
+@import '../../theming/variables.scss';
+
+$primary: map-get($theme, primary);
+$foreground: map-get($theme, foreground);
+
+form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.detail-wrapper {
+    overflow: hidden;
+    width: 900px;
+    padding: 32px;
+}
+
+.mat-error {
+    font-size: 14px;
+}

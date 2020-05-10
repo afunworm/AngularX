@@ -1,0 +1,24 @@
+.angularx-bar-progress-wrapper {
+    position: fixed;
+    display: block;
+    width: 100%;
+    z-index: 11111;
+    top: 0px;
+}
+
+.angularx-dialog-progress-wrapper {
+    display: flex;
+    z-index: 111111;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(0, 0, 0, .88);
+}
+
+.angularx-dialog-progress-wrapper .mat-card {
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+    padding: 22px;
+    min-height: 150px;
+}

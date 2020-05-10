@@ -1,0 +1,87 @@
+@import '~@angular/material/theming';
+@include mat-core();
+@import '../theming/variables.scss';
+
+$primary: map-get($theme, primary);
+$background: map-get($theme, background);
+$foreground: map-get($theme, foreground);
+$text: map-get($foreground, text);
+
+.angularx-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.angularx-container .mat-toolbar {
+    background: mat-color($background, background) !important;
+}
+
+.angularx-is-mobile .angularx-toolbar {
+    position: fixed;
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    z-index: 2;
+}
+
+.angularx-app-brand {
+    margin-left: 8px;
+    color: $text;
+}
+
+.angularx-container .mat-drawer-side {
+    border: 0px;
+}
+
+.angularx-sidenav-container {
+    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+    causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+    flex: 1;
+}
+
+.angularx-is-mobile .angularx-sidenav-container {
+    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+    `<body>` to be our scrolling element for mobile layouts. */
+    flex: 1 0 auto;
+}
+
+mat-sidenav-content {
+    padding: 22px 22px;
+}
+
+.mat-sidenav {
+    width: 256px;
+    padding-left: 11px;
+    padding-right: 11px;
+}
+
+.mat-sidenav .mat-divider {
+    display: none;
+}
+
+.mat-list-item {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.mat-list-item a.anml-link {
+    color: $text;
+    opacity: 0.75;
+}
+
+.mat-list-item.active-amml-item {
+    background-color: mat-color($primary, lighter) !important;
+}
+
+.mat-list-item.active-amml-item a.anml-link {
+    color: mat-color($primary);
+    opacity: 1;
+}
+
+.mat-list-item a.anml-link:hover {
+    color: mat-color($primary);
+    opacity: 1;
+}

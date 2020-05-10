@@ -1,0 +1,36 @@
+<div class="angularx-table angularx-table-wrapper mat-elevation-z5" [ngStyle]="tableStyle">
+
+    <h2 *ngIf="configs.title.text && configs.title.text !== ''" [class]="configs.title.classes" [ngStyle]="configs.title.styles">{{ configs.title.text }}</h2>
+
+    <section *ngFor="let entry of data">
+
+        <!-- ENTRY START -->
+        <mat-grid-list
+            [cols]="configs.nameField.colspan + configs.valueField.colspan + configs.extraField.colspan"
+            [rowHeight]="configs.rowHeight" [class]="configs.entry.classes" [ngStyle]="configs.entry.styles"
+            (click)="emitOnRowClick(entry.onRowClick)">
+
+            <!-- Data Name -->
+            <mat-grid-tile [colspan]="configs.nameField.colspan" [rowspan]="1"
+                [class]="configs.nameField.classes" [ngStyle]="configs.nameField.styles"
+                (click)="emitOnNameClick(entry.onNameClick)">
+                {{ entry.name }}
+            </mat-grid-tile>
+
+            <!-- Data Value -->
+            <mat-grid-tile [colspan]="configs.valueField.colspan" [rowspan]="1"
+                [class]="configs.valueField.classes" [ngStyle]="configs.valueField.styles"
+                (click)="emitOnValueClick(entry.onValueClick)">
+                <span [innerHTML]="processOutputValue(entry)" [style.whiteSpace]="entry.valueWrap ? 'normal' : 'nowrap'"></span>
+            </mat-grid-tile>
+
+            <!-- Extra Column -->
+            <mat-grid-tile [colspan]="configs.extraField.colspan" [rowspan]="1" [class]="configs.extraField.classes" [ngStyle]="configs.extraField.styles">
+                
+            </mat-grid-tile>
+        </mat-grid-list>
+
+        <mat-divider></mat-divider>
+    </section>
+
+</div>

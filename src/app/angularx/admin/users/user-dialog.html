@@ -1,0 +1,71 @@
+<div mat-dialog-content class="userList">
+
+    <mat-grid-list cols="6" rowHeight="75">
+        <mat-grid-tile [colspan]="4" [rowspan]="1">
+            <mat-card style="box-shadow: none; padding-top: 0px;">
+                <mat-card-header>
+                    <div mat-card-avatar [style.background]="'url(' + data.original.photoURL + ')'" [ngStyle]="{height: '72px', width: '72px', backgroundSize: 'cover', backgroundPosition: 'center center'}"></div>
+                    <mat-card-title style="font-size: 22px; margin-top: 12px;">{{ data.original.displayName }}</mat-card-title>
+                    <mat-card-subtitle><strong>UID</strong> {{ data.original.uid }}</mat-card-subtitle>
+                </mat-card-header>
+            </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <div style="padding-top: 12px;" align="center">
+                <mat-card-title style="font-size: 17px;">STATUS</mat-card-title>
+                <mat-card-subtitle style="color: #00E676;" *ngIf="!data.disabled">Active</mat-card-subtitle>
+                <mat-card-subtitle style="color: #EF5350;" *ngIf="data.disabled">Disabled</mat-card-subtitle>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <div style="padding-top: 12px;" align="center">
+                <mat-card-title style="font-size: 17px;">VERIFICATION</mat-card-title>
+                <mat-card-subtitle style="color: #00E676;" *ngIf="data.emailVerified">Verified</mat-card-subtitle>
+                <mat-card-subtitle style="color: #EF5350;" *ngIf="!data.emailVerified">Unverified</mat-card-subtitle>
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <div align="center" style="padding: 0px 0px 11px 100px;"><mat-divider style="display: block;"></mat-divider></div>
+
+    <div style="padding-left: 100px;">
+        <h2 class="mat-h2">
+            <span [ngSwitch]="data.infoType">
+                <span *ngSwitchCase="'standard'">STANDARD INFO</span>
+                <span *ngSwitchCase="'extra'">EXTRA INFO</span>
+                <span *ngSwitchCase="'custom'">CUSTOM INFO</span>
+            </span>
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More Actions"><mat-icon style="margin-top: -7px;">more_vert</mat-icon></button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="data.infoType = 'standard'" [disabled]="data.infoType == 'standard'">
+                    <mat-icon>info</mat-icon>
+                    <span>STANDARD INFO</span>
+                </button>
+                <button mat-menu-item (click)="data.infoType = 'extra'" [disabled]="data.infoType == 'extra'">
+                    <mat-icon>lock</mat-icon>
+                    <span>EXTRA INFO</span>
+                </button>
+                <button mat-menu-item (click)="data.infoType = 'custom'" [disabled]="data.infoType == 'custom'">
+                    <mat-icon>create</mat-icon>
+                    <span>CUSTOM INFO</span>
+                </button>
+            </mat-menu>
+        </h2>
+    </div>
+
+    <div style="padding: 0px 33px 0px 100px;" *ngIf="data.infoType == 'standard'">
+        <angularx-table [data]='data.standard'></angularx-table>
+    </div>
+
+    <div style="padding: 0px 33px 0px 100px;" *ngIf="data.infoType == 'extra'">
+        <angularx-table [data]='data.extra'></angularx-table>
+    </div>
+
+    <div style="padding: 0px 33px 0px 100px;" *ngIf="data.infoType == 'custom'">
+        <angularx-table [data]='data.custom'></angularx-table>
+    </div>
+
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>DONE</button>
+</div>

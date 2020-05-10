@@ -1,0 +1,14 @@
+<div class="angularx-bar-progress-wrapper" *ngIf="isBarLoading">
+    <mat-progress-bar [mode]="mode" [color]="color" [value]="value"></mat-progress-bar>
+</div>
+<div class="angularx-dialog-progress-wrapper" *ngIf="isDialogLoading">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>{{ title }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content style="padding: 35px 16px;">
+            <p>{{ message }}</p>
+            <mat-progress-bar [mode]="mode" [color]="color" [value]="value"></mat-progress-bar>
+        </mat-card-content>
+    </mat-card>
+</div>

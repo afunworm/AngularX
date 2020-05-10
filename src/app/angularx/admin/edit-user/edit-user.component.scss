@@ -1,0 +1,13 @@
+@import '~@angular/material/theming';
+@include mat-core();
+@import '../../theming/variables.scss';
+
+$primary: map-get($theme, primary);
+
+table.mat-table.userInfo {
+    width: 100%;
+}
+
+.userInfo td, .userInfo th {
+    width: 25%;
+}  

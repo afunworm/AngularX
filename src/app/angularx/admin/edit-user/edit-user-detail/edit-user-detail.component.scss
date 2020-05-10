@@ -1,0 +1,99 @@
+@import '~@angular/material/theming';
+@include mat-core();
+@import '../../../theming/variables.scss';
+
+$primary: map-get($theme, primary);
+$accent: map-get($theme, accent);
+$background: map-get($theme, background);
+$foreground: map-get($theme, foreground);
+$text: map-get($foreground, text);
+$label-color: mat-color($foreground, secondary-text, 0.6);
+
+input.readOnlyControl.mat-input-element[readonly] {
+    color: $label-color;
+    font-style: italic;
+}
+
+.mat-form-field.mat-form-field-infix-control .mat-form-field-infix {
+    width: auto !important;
+}
+
+form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.detail-wrapper {
+    overflow: hidden;
+    width: 900px;
+    padding: 32px;
+}
+
+.mat-error {
+    font-size: 13px;
+}
+
+.mat-ink-bar {
+    background-color: mat-color($accent) !important;
+}
+
+.mat-tab-body {
+    padding: 45px 15px 45px 15px;
+}
+
+.detail-wrapper .mat-card-avatar {
+    height: 211px;
+    width: 211px;
+    background-size: cover !important;
+    background-position: center center !important;
+}
+
+.mat-tab-labels {
+    justify-content: center;
+}
+
+.mat-progress-bar, .mat-progress-bar * {
+    transition: none;
+}
+
+/* Time picker */
+.timepicker .timepicker__header {
+    background-color: mat-color($primary) !important; /* Dialog header */
+}
+
+// .timepicker .timepicker__actions {
+//     // background-color: mat-color($primary) !important; /* Dialog actions */
+// }
+
+// .timepicker .clock-face__clock-hand, .timepicker .clock-face__clock-hand:hover {
+//     // background-color: mat-color($accent) !important; /* Clock hands */
+// }
+
+// .timepicker .clock-face__clock-hand::after {
+//     // background-color: mat-color($accent) !important; /* Clock hands */
+// }
+
+// .timepicker .clock-face__clock-hand::before {
+//     // border-color: mat-color($accent) !important; /* Clock hands */
+// }
+
+// .timepicker .timepicker__body {
+//     // background-color: mat-color($primary) !important; /* Body of the time picker dialog */
+// }
+
+// .timepicker .clock-face {
+//     // background-color: mat-color($primary, darker) !important; /* Clock face background */
+// }
+
+// .timepicker .clock-face__number--outer > span {
+//     // color: $text !important; /* Number on clock */
+// }
+
+.timepicker .clock-face__number  > span.active {
+    background-color: mat-color($accent) !important; /* The circle around selected number */
+}
+
+.timepicker button:not(.timepicker-dial__item) {
+    color: $text !important; /* Button on picker dialog */
+}

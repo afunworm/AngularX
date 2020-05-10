@@ -1,0 +1,42 @@
+@import '~@angular/material/theming';
+@include mat-core();
+@import '../../../theming/variables.scss';
+
+$primary: map-get($theme, primary);
+$foreground: map-get($theme, foreground);
+$text: map-get($foreground, text);
+
+.angularx-table.angularx-table-wrapper {
+    overflow: hidden;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.angularx-table .mat-grid-tile {
+    overflow-x: scroll;
+}
+
+.angularx-table .mat-grid-tile .mat-figure {
+    padding-top: 14px;
+    padding-left: 21px;
+    padding-right: 21px;
+    justify-content: start;
+}
+
+.angularx-table .mat-grid-list:hover {
+    background: mat-color($primary, lighter);
+}
+
+.angularx-table a {
+    color: mat-color($primary);
+}
+
+.angularx-table a:hover {
+    color: mat-color($primary);
+    text-decoration: none;
+}
+
+.angularx-table .mat-divider:last-child {
+    display: none;
+}

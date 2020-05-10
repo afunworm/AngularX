@@ -1,0 +1,19 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+//Define palettes
+//mat-palette(color, default, lighter, darker)
+$primary:          mat-palette($mat-blue, 600, 50);
+$accent:           mat-palette($mat-blue, 600, 50);
+$warn:             mat-palette($mat-red, 500, 100, 900);
+
+//Create the theme
+$theme: mat-light-theme($primary, $accent, $warn);
+
+//Configure background
+$background-color: #FFF;
+$background: map-get($theme, background);
+$background: map_merge($background, (background: $background-color));
+$theme: map_merge($theme, (background: $background));
+
+@include angular-material-theme($theme);

@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "angularx-299c1": {
+      "hosting": {
+        "angularx": [
+          "angularx-299c1"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-4" *ngFor="let uid of objectKeys(userData)">
+            <mat-card style="max-width: 600px;" class="mat-elevation-z5">
+
+                <!-- HEADER -->
+                <mat-card-header style="padding-top: 11px;">
+                    <div mat-card-avatar
+                        [style.background]="'url(' + userData[uid].photoURL + ')'"
+                        [ngStyle]="{backgroundSize: 'cover', height: '72px', width: '72px', backgroundPosition: 'center center'}"></div>
+                    <mat-card-title>{{ userData[uid].displayName }}</mat-card-title>
+                    <mat-card-subtitle>
+                        <mat-icon [inline]="true">alternate_email</mat-icon> {{ userData[uid].email }}
+                        <br>
+                        <mat-icon [inline]="true">call</mat-icon> {{ userData[uid].phoneNumber }}
+                    </mat-card-subtitle>
+                </mat-card-header>
+
+                <!-- ACTIONS -->
+                <mat-card-actions align="end">
+
+                    <button mat-button (click)="viewUser(uid)" [disabled]="isLoading">
+                        <div *ngIf="!isLoading">VIEW PROFILE</div>
+                        <div *ngIf="isLoading">LOADING...</div>
+                    </button>
+                    <button mat-button [disabled]="isLoading" (click)="editUser(uid)">
+                        <div *ngIf="!isLoading">EDIT USER</div>
+                        <div *ngIf="isLoading">LOADING...</div></button>
+
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More Actions"><mat-icon>more_vert</mat-icon></button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item [disabled]="isLoading">
+                            <mat-icon>block</mat-icon>
+                            <span>DISABLE USER</span>
+                        </button>
+                        <button mat-menu-item [disabled]="isLoading">
+                            <mat-icon>delete</mat-icon>
+                            <span>DELETE USER</span>
+                        </button>
+                    </mat-menu>
+
+                </mat-card-actions>
+            </mat-card>
+        </div>
+
+    </div>
+</div>

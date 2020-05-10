@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~firebaseui/dist/firebaseui.css';
+@import '~material-icons/iconfont/material-icons.css';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+*:focus {
+    outline: none !important;
+    border: 0 !important;
+}

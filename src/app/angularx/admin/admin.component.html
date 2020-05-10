@@ -1,0 +1,29 @@
+<angularx-loading></angularx-loading>
+<div class="angularx-container" [class.angularx-is-mobile]="mobileQuery.matches">
+    <mat-toolbar color="primary" class="angularx-toolbar">
+        <button mat-icon-button (click)="snav.toggle()" hidden><mat-icon>menu</mat-icon></button>
+        <div class="angularx-app-brand">
+            <h2>AngularX Admin</h2>
+        </div>
+    </mat-toolbar>
+  
+    <mat-sidenav-container class="angularx-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+        <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" opened="true" disableClose="false">
+
+            <!-- Main Menu -->
+            <mat-nav-list>
+                <ng-material-multilevel-menu [configuration]='navConfig' [items]='mainNavItems' expandCollapseStatus='expand'></ng-material-multilevel-menu>
+            </mat-nav-list>
+
+            <!-- Account Menu -->
+            <mat-nav-list>
+                <ng-material-multilevel-menu [configuration]='navConfig' [items]='accountNavItems' expandCollapseStatus='expand'></ng-material-multilevel-menu>
+            </mat-nav-list>
+
+        </mat-sidenav>
+  
+        <mat-sidenav-content>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>
