@@ -35,7 +35,7 @@
         <!-- Phone Number -->
         <mat-form-field appearance="outline" style="width: 100%;" color="accent">
             <mat-label>Phone Number</mat-label>
-            <input type="tel" matInput ngxInput phoneFormat="(***) ***-****" name="phoneNumber" ngModel pattern="\(\d{3}\)\040\d{3}-\d{4}">
+            <input type="tel" matInput ngxInput phoneFormat="(***) ***-****" name="phoneNumber" ngModel pattern="^$|\(\d{3}\)\040\d{3}-\d{4}">
             <mat-error *ngIf="userForm.controls.phoneNumber?.errors">Phone number should be in (xxx) xxx-xxxx format.</mat-error>
         </mat-form-field>
 
