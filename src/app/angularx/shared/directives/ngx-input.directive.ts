@@ -54,13 +54,14 @@ export class NgxInputDirective implements OnInit {
      *-------------------------------------------------------*/
     @HostListener('keyup', ['$event']) formatToType($event: KeyboardEvent) {
 
+        let value = this._elementRef.nativeElement.value;
+
         //if (this.isModifierKey($event) || this.type !== 'tel') return;
-        if (this.type !== 'tel' && this.type !== 'ssn') return;
+        if (!this.isModifierKey($event) && this.type !== 'tel' && this.type !== 'ssn') return;
 
         let format = this.type === 'ssn' ? '***-**-****' : this.format;
         let maxDigitFromFormat = format.split('').reduce((a, v) => a += (v === '*') ? v : '', '').length;
         let result = '';
-        let value = this._elementRef.nativeElement.value;
         let input = value.replace(/\D/g, '').substring(0, maxDigitFromFormat).split('');
         let maxDigitFromInput = input.length;
         let counter = 0; //Counter by length, not by index
@@ -76,6 +77,9 @@ export class NgxInputDirective implements OnInit {
                 result += character;
             }
         });
+
+        //Remove all the non-digits at the end of the string
+        while (result.length > 0 && !/\d/.test(result.substr(-1))) result = result.slice(0, -1);
     
         //Return empty if result contains no digit
         result = result.replace(/\D/g, '').length === 0 ? '' : result;
@@ -104,6 +108,10 @@ export class NgxInputDirective implements OnInit {
             ($event.shiftKey === true && $event.keyCode <= 187) // Allow + (by pressing shift =) from keyboard
         );
 
+    }
+
+    isBackspaceKey($event) {
+        return $event.keyCode === 8;
     }
 
     isModifierKey($event) {
