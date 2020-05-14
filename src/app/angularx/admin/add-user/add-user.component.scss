@@ -5,16 +5,11 @@
 $primary: map-get($theme, primary);
 $foreground: map-get($theme, foreground);
 
-form {
+angularx-wrapper form {
     min-width: 150px;
     max-width: 500px;
     width: 100%;
-}
-
-.detail-wrapper {
-    overflow: hidden;
-    width: 900px;
-    padding: 32px;
+    display: inline-block;
 }
 
 .mat-error {

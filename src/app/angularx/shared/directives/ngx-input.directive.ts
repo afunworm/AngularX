@@ -40,18 +40,24 @@ export class NgxInputDirective implements OnInit {
                 $event.preventDefault();
                 return;
             }
+        } else if (this.type === 'ssn') { //Enforce formatting for number
+            if (!this.isNumericInput($event) && !this.isModifierKey($event) && !this.isNumericSignInput($event)) { //Check for keyboard input
+                $event.preventDefault();
+                return;
+            }
         }
         
     }
 
     /*-------------------------------------------------------*
-     * formatToPhone() for tel only
+     * formatToType() for tel & ssn only
      *-------------------------------------------------------*/
-    @HostListener('keyup', ['$event']) formatToPhone($event: KeyboardEvent) {
+    @HostListener('keyup', ['$event']) formatToType($event: KeyboardEvent) {
 
-        if (this.isModifierKey($event) || this.type !== 'tel') return;
+        //if (this.isModifierKey($event) || this.type !== 'tel') return;
+        if (this.type !== 'tel' && this.type !== 'ssn') return;
 
-        let format = this.format;
+        let format = this.type === 'ssn' ? '***-**-****' : this.format;
         let maxDigitFromFormat = format.split('').reduce((a, v) => a += (v === '*') ? v : '', '').length;
         let result = '';
         let value = this._elementRef.nativeElement.value;

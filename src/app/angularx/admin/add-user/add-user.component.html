@@ -1,65 +1,61 @@
-<div align="center">
+<angularx-wrapper align="center" contentAlign="center">
 
-    <div class="detail-wrapper mat-elevation-z5">
+    <h2 class="mat-h2" style="text-align: left;">Add New User</h2>
 
-        <h2 class="mat-h2" style="text-align: left;">Add New User</h2>
+    <form #userForm="ngForm" (ngSubmit)="addUser(userForm)">
 
-        <form #userForm="ngForm" (ngSubmit)="addUser(userForm)">
+        <!-- First Name -->
+        <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+            <mat-label>First Name</mat-label>
+            <input matInput name="firstName" pattern="^[a-zA-Z \.-]*$" ngModel>
+            <mat-error *ngIf="userForm.controls.firstName?.errors">Invalid first name.</mat-error>
+        </mat-form-field>
 
-            <!-- First Name -->
-            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
-                <mat-label>First Name</mat-label>
-                <input matInput name="firstName" pattern="^[a-zA-Z \.-]*$" ngModel>
-                <mat-error *ngIf="userForm.controls.firstName?.errors">Invalid first name.</mat-error>
-            </mat-form-field>
+        <!-- Last Name -->
+        <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+            <mat-label>Last Name</mat-label>
+            <input matInput name="lastName" pattern="^[a-zA-Z \.-]*$" ngModel>
+            <mat-error *ngIf="userForm.controls.lastName?.errors">Invalid first name.</mat-error>
+        </mat-form-field>
 
-            <!-- Last Name -->
-            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
-                <mat-label>Last Name</mat-label>
-                <input matInput name="lastName" pattern="^[a-zA-Z \.-]*$" ngModel>
-                <mat-error *ngIf="userForm.controls.lastName?.errors">Invalid first name.</mat-error>
-            </mat-form-field>
+        <!-- Display Name -->
+        <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+            <mat-label>Display Name</mat-label>
+            <input matInput name="displayName" pattern="^[a-zA-Z \.-]*$" ngModel>
+            <mat-error *ngIf="userForm.controls.displayName?.errors">Invalid display name.</mat-error>
+        </mat-form-field>
 
-            <!-- Display Name -->
-            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
-                <mat-label>Display Name</mat-label>
-                <input matInput name="displayName" pattern="^[a-zA-Z \.-]*$" ngModel>
-                <mat-error *ngIf="userForm.controls.displayName?.errors">Invalid display name.</mat-error>
-            </mat-form-field>
+        <!-- Email -->
+        <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput name="email" email required ngModel>
+            <mat-error *ngIf="userForm.controls.email?.errors">Invalid email.</mat-error>
+        </mat-form-field>
 
-            <!-- Email -->
-            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
-                <mat-label>Email</mat-label>
-                <input type="email" matInput name="email" email required ngModel>
-                <mat-error *ngIf="userForm.controls.email?.errors">Invalid email.</mat-error>
-            </mat-form-field>
+        <!-- Phone Number -->
+        <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+            <mat-label>Phone Number</mat-label>
+            <input type="tel" matInput ngxInput phoneFormat="(***) ***-****" name="phoneNumber" ngModel pattern="\(\d{3}\)\040\d{3}-\d{4}">
+            <mat-error *ngIf="userForm.controls.phoneNumber?.errors">Phone number should be in (xxx) xxx-xxxx format.</mat-error>
+        </mat-form-field>
 
-            <!-- Phone Number -->
-            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
-                <mat-label>Phone Number</mat-label>
-                <input type="tel" matInput ngxInput phoneFormat="(***) ***-****" name="phoneNumber" ngModel pattern="\(\d{3}\)\040\d{3}-\d{4}">
-                <mat-error *ngIf="userForm.controls.phoneNumber?.errors">Phone number should be in (xxx) xxx-xxxx format.</mat-error>
-            </mat-form-field>
+        <!-- Date of Birth -->
+        <mat-form-field appearance="outline" style="width: 100%;" color="accent">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="dob" (focus)="dob.open()" (click)="dob.open()" readonly name="dob" date #dobInput ngModel>
+            <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+            <mat-datepicker #dob disabled="false"></mat-datepicker>
+            <mat-error *ngIf="userForm.controls.dob?.errors">Invalid Date format.</mat-error>
+        </mat-form-field>
 
-            <!-- Date of Birth -->
-            <mat-form-field appearance="outline" style="width: 100%;" color="accent">
-                <mat-label>Date of Birth</mat-label>
-                <input matInput [matDatepicker]="dob" (focus)="dob.open()" (click)="dob.open()" readonly name="dob" date #dobInput ngModel>
-                <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                <mat-datepicker #dob disabled="false"></mat-datepicker>
-                <mat-error *ngIf="userForm.controls.dob?.errors">Invalid Date format.</mat-error>
-            </mat-form-field>
+        <a mat-button (click)="cancel()">Cancel</a>
+        <span style="display: inline-block; width: 25px;"></span>
+        <button mat-flat-button color="accent"
+            [disabled]="userForm.form.status === 'INVALID' || userForm.form.pristine || isSubmitting">
+            <span *ngIf="isSubmitting">Adding User</span>
+            <span *ngIf="!isSubmitting">Add User</span>
+        </button>
 
-            <a mat-button (click)="cancel()">Cancel</a>
-            <span style="display: inline-block; width: 25px;"></span>
-            <button mat-flat-button color="accent"
-                [disabled]="userForm.form.status === 'INVALID' || userForm.form.pristine || isSubmitting">
-                <span *ngIf="isSubmitting">Adding User</span>
-                <span *ngIf="!isSubmitting">Add User</span>
-            </button>
+    </form>
 
-        </form>
-
-    </div>
-
-</div>
+</angularx-wrapper>

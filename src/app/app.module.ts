@@ -30,6 +30,7 @@ import { AngularXDialogModule } from './angularx/shared/services/angularx-dialog
 import { AngularXDialogComponent } from './angularx/shared/services/angularx-dialog/angularx-dialog.component';
 import { AngularxLoadingComponent } from './angularx/shared/services/angularx-loading/angularx-loading.component';
 import { NgxInputDirective } from './angularx/shared/directives/ngx-input.directive';
+import { AngularxWrapperComponent } from './angularx/shared/components/angularx-wrapper/angularx-wrapper.component';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import { NgxInputDirective } from './angularx/shared/directives/ngx-input.direct
         EditUserDetailComponent,
         AddUserComponent,
         AngularxLoadingComponent,
-        NgxInputDirective
+        NgxInputDirective,
+        AngularxWrapperComponent
     ],
     imports: [
         BrowserModule,
