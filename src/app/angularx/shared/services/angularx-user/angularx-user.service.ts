@@ -1,13 +1,12 @@
 import { Injectable } from "@angular/core";
-import { AngularXCacheService } from '../angularx-cache/angularx-cache.service';
 import { AngularXHTTPService, JSONObject } from '../angularx-http/angularx-http.service';
-import { tap, map, switchMap } from 'rxjs/operators';
-import { of, throwError } from 'rxjs';
-import { FirebaseCoreService } from '../firebase/firebase-core.service';
+import { tap, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 import * as firebase from 'firebase/app';
 import Timestamp = firebase.firestore.Timestamp;
 import { merge as _merge } from 'lodash';
 import { forEach as _forEach } from 'lodash';
+import { FirebaseCoreService } from '../firebase/firebase-core.service';
 
 export interface UserAuthDataInterface {
     uid: string,
@@ -66,8 +65,26 @@ export class AngularXUserService {
     
     private _users: UsersDataInterface = {};
     private _gotUsers: boolean = false;
+    private _currentUserId: null | string = null;
 
-    constructor(private _cache: AngularXCacheService, private _http: AngularXHTTPService, private _firebaseCore: FirebaseCoreService) {
+    constructor(private _http: AngularXHTTPService, private _firebaseCore: FirebaseCoreService) {
+    }
+
+    getCurrentUser() {
+
+        //Current user is set
+        if (this._currentUserId !== null) return this.getUser(this._currentUserId);
+        
+        //Current is not set, check if the user is logged in
+        let firebase = this._firebaseCore.getFirebaseInstance();
+        let firebaseCurrentUser = firebase.auth().currentUser;
+
+        //Cannot load the current user if the user isn't logged in
+        if (!firebaseCurrentUser) return;
+
+        let uid = firebaseCurrentUser.uid;
+        return this.getUser(uid, true, true); //Let getUser() know that this is the current user
+
     }
 
     isObject(item) {
@@ -154,7 +171,7 @@ export class AngularXUserService {
         );
     }
 
-    getUser(uid: string, forceRefresh: boolean = false) {
+    getUser(uid: string, forceRefresh: boolean = false, isCurrentUser: boolean = false) {
         //When a user is retrieved using this method, extra fields from Firestore will appear
         //Such as firstName, lastName, dob, etc.
         if (this._users[uid]?.firstName) {
@@ -203,6 +220,7 @@ export class AngularXUserService {
                 }
             }),
             map(() => {
+                if (isCurrentUser) this._currentUserId = uid;
                 return this._users[uid];
             })
         );
