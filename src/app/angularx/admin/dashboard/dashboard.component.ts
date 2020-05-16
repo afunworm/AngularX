@@ -13,7 +13,7 @@ export class DashboardComponent implements OnInit {
     constructor(private _dialogService: AngularXDialogService, private _loadingService: AngularXLoadingService) {}
 
     ngOnInit(): void {
-        this._loadingService.hide();
+        this._loadingService.pageLoaded();
     }
 
 }

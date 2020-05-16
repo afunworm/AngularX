@@ -20,12 +20,11 @@ export class AddUserComponent implements OnInit {
                 private _loadingService: AngularXLoadingService) { }
 
     ngOnInit(): void {
-        //Hide loading message
-        this._loadingService.hide();
+        this._loadingService.pageLoaded();
     }
 
     cancel() {
-        this._router.navigate(['../'], {relativeTo: this._activatedRoute});
+        this._router.navigate(['../../users'], {relativeTo: this._activatedRoute});
     }
     
     addUser(form: NgForm) {

@@ -21,7 +21,6 @@ export class EditUserComponent implements OnInit {
     displayedColumns: string[] = ['uid', 'displayName', 'email', 'phoneNumber', 'actions'];
     dataSource: MatTableDataSource<any>;
     editMode: boolean = false;
-    dataLoaded: Promise<boolean>;
     data = {
         standard: {},
         custom: {}
@@ -69,10 +68,8 @@ export class EditUserComponent implements OnInit {
                 this.dataSource.sort = this.sort;
 
                 //Inform template that data has loaded
-                this.dataLoaded = Promise.resolve(true);
+                this._loadingService.pageLoaded();
 
-                //Hide loading message
-                this._loadingService.hide();
             }, (error) => {
                 //Show error
                 this._dialogService.alert({
@@ -80,7 +77,7 @@ export class EditUserComponent implements OnInit {
                     message: error
                 });
                 //Hide loading message
-                this._loadingService.hide();
+                this._loadingService.pageLoaded();
             });
         } else {
             //Display the user details of the queried UID
@@ -200,10 +197,7 @@ export class EditUserComponent implements OnInit {
                 this.data.custom = data;
 
                 //Inform template that data has loaded
-                this.dataLoaded = Promise.resolve(true);
-
-                //Hide loading message
-                this._loadingService.hide();
+                this._loadingService.pageLoaded();
 
             }, (error) => {
                 //Show error
@@ -212,7 +206,7 @@ export class EditUserComponent implements OnInit {
                     message: error
                 });
                 //Hide loading message
-                this._loadingService.hide();
+                this._loadingService.pageLoaded();
             });
         }
         

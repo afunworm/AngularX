@@ -11,8 +11,8 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
     constructor(private _router: Router, private _afAuth: AngularFireAuth, private _activatedRoute: ActivatedRoute, private _loadingService: AngularXLoadingService) {}
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        
-        this._loadingService.show('bar');
+
+        this._loadingService.pageLoading();
 
         return this._afAuth.authState.pipe(
             take(1),
@@ -31,7 +31,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
     //canActivateChild is the same with canActivate, except it doesn't protect the parent
     canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         
-        this._loadingService.show('bar');
+        this._loadingService.pageLoading();
 
         return this._afAuth.authState.pipe(
             take(1),

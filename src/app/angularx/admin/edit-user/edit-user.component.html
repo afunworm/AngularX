@@ -1,4 +1,4 @@
-<div *ngIf="!editMode && dataLoaded | async">
+<div *ngxIfPageLoaded="!editMode">
     <mat-form-field>
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="By ID, name, email, etc.">
@@ -49,7 +49,7 @@
     </div>
 </div>
 
-<div style="width: 100%;" align="center" *ngIf="editMode && dataLoaded | async">
+<div style="width: 100%;" align="center" *ngxIfPageLoaded="editMode">
     <div style="width: 800px;" align="left">
         <angularx-table title="Standard Info" [data]="data.standard" [style]="{width: '900px', marginBottom: '32px'}"></angularx-table>
         <angularx-table title="Custom Info" [data]="data.custom" [style]="{width: '900px'}"></angularx-table>

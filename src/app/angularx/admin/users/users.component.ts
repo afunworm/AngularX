@@ -47,7 +47,7 @@ export class UsersComponent implements OnInit {
             }
 
             //Hide loading message
-            this._loadingService.hide();
+            this._loadingService.pageLoaded();
         }, (error) => {
             //Show error
             this._dialogService.alert({
@@ -55,7 +55,7 @@ export class UsersComponent implements OnInit {
                 message: error
             });
             //Hide loading message
-            this._loadingService.hide();
+            this._loadingService.pageLoaded();
         });
     }
 

@@ -31,6 +31,7 @@ import { AngularXDialogComponent } from './angularx/shared/services/angularx-dia
 import { AngularxLoadingComponent } from './angularx/shared/services/angularx-loading/angularx-loading.component';
 import { NgxInputDirective } from './angularx/shared/directives/ngx-input.directive';
 import { AngularxWrapperComponent } from './angularx/shared/components/angularx-wrapper/angularx-wrapper.component';
+import { NgxIfPageLoadedDirective } from './angularx/shared/directives/ngx-if-page-loaded.directive';
 
 @NgModule({
     declarations: [
@@ -47,7 +48,8 @@ import { AngularxWrapperComponent } from './angularx/shared/components/angularx-
         AddUserComponent,
         AngularxLoadingComponent,
         NgxInputDirective,
-        AngularxWrapperComponent
+        AngularxWrapperComponent,
+        NgxIfPageLoadedDirective
     ],
     imports: [
         BrowserModule,
