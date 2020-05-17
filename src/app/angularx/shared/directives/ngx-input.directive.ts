@@ -1,21 +1,28 @@
 import { Directive, Input, HostListener, ElementRef, Renderer2, OnInit } from '@angular/core';
+import { NgModel, NgControl } from '@angular/forms';
 
 @Directive({
     selector: '[ngxInput]'
 })
 export class NgxInputDirective implements OnInit {
 
-    @Input('type') type: string;
+    @Input('type') type: string = 'text';
+    @Input('name') name: string = '';
     @Input('phoneFormat') format: string = '(***) ***-****';
+    private _oldValue;
     private _numberRegex = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/;
 
-    constructor(private _elementRef: ElementRef, private _renderer: Renderer2) { }
+    constructor(private _elementRef: ElementRef, private _renderer: Renderer2, private _model: NgModel, private _ngControl: NgControl) { }
 
     ngOnInit() {
+
         if (!/^( |\(|\)|\*|-)*$/.test(this.format)) {
             this.format = '(***) ***-****';
             throw new Error('phoneFormat for ngxInput can only contain (, ), *, - or space. Reverted to default format (***) ***-****.');
         }
+
+        this.subscribeToValueChanges();
+
     }
 
     /*-------------------------------------------------------*
@@ -41,7 +48,10 @@ export class NgxInputDirective implements OnInit {
                 return;
             }
         } else if (this.type === 'ssn') { //Enforce formatting for number
-            if (!this.isNumericInput($event) && !this.isModifierKey($event) && !this.isNumericSignInput($event)) { //Check for keyboard input
+            if (
+                (!this.isNumericInput($event) && !this.isModifierKey($event)) || //Check for keyboard input
+                (value.replace(/\D/g, '').length >= 9 && !this.isModifierKey($event)) //Check if numbers input exceed the length of SSN format
+            ) {
                 $event.preventDefault();
                 return;
             }
@@ -52,17 +62,48 @@ export class NgxInputDirective implements OnInit {
     /*-------------------------------------------------------*
      * formatToType() for tel & ssn only
      *-------------------------------------------------------*/
-    @HostListener('keyup', ['$event']) formatToType($event: KeyboardEvent) {
+    @HostListener('keyup', ['$event'])
+    formatToType($event: KeyboardEvent) {
 
         let value = this._elementRef.nativeElement.value;
+        let type = this.type;
 
-        //if (this.isModifierKey($event) || this.type !== 'tel') return;
-        if (!this.isModifierKey($event) && this.type !== 'tel' && this.type !== 'ssn') return;
+        if (!this.isModifierKey($event) && type !== 'tel' && type !== 'ssn') return;
 
-        let format = this.type === 'ssn' ? '***-**-****' : this.format;
+        let result = this.formatInput(value, type);
+        this._ngControl.control.setValue(result);
+        // this._renderer.setProperty(this._elementRef.nativeElement, 'value', result);
+
+    }
+    subscribeToValueChanges() {
+        this._model.valueChanges.subscribe(value => {
+            if (value === this._oldValue) return; //Avoid infinite loop
+            this._oldValue = value;
+
+            //When value changes on this ngModel, autoformat it
+            let type = this.type;
+            let result = this.formatInput(value, type);
+            this._ngControl.control.setValue(result);
+        });
+    }
+
+    /*---------------------------------------------------------------*
+     * Helper functions
+     *---------------------------------------------------------------*/
+    formatInput(input, type: 'tel' | 'number' | 'ssn' | string) {
+
+        let format = type === 'ssn' ? '***-**-****' : this.format;
         let maxDigitFromFormat = format.split('').reduce((a, v) => a += (v === '*') ? v : '', '').length;
         let result = '';
-        let input = value.replace(/\D/g, '').substring(0, maxDigitFromFormat).split('');
+
+        //Remove non-numeric characters
+        if (input === null || input === undefined) input = '';
+        input = input.toString().replace(/\D/g, '');
+        //Remove leading 1 for phone number
+        if (type === 'tel' && input.length === 11 && (input.startsWith('1') || input.startsWith(1))) input = input.substr(1);
+        //Only get the maximum number of digits
+        input = input.substring(0, maxDigitFromFormat).split('');
+
         let maxDigitFromInput = input.length;
         let counter = 0; //Counter by length, not by index
 
@@ -84,13 +125,10 @@ export class NgxInputDirective implements OnInit {
         //Return empty if result contains no digit
         result = result.replace(/\D/g, '').length === 0 ? '' : result;
 
-        this._renderer.setProperty(this._elementRef.nativeElement, 'value', result);
+        return result;
 
     }
 
-    /*---------------------------------------------------------------*
-     * Helper functions
-     *---------------------------------------------------------------*/
     isNumericInput($event) {
 
         return (

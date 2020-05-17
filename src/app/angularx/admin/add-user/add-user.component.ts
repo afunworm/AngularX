@@ -40,5 +40,4 @@ export class AddUserComponent implements OnInit {
             this.isSubmitting = false;
         });
     }
-
 }
