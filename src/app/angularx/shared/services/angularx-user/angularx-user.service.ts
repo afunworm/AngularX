@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AngularXHTTPService, JSONObject } from '../angularx-http/angularx-http.service';
-import { tap, map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { tap, map, catchError } from 'rxjs/operators';
+import { of, throwError } from 'rxjs';
 import * as firebase from 'firebase/app';
 import Timestamp = firebase.firestore.Timestamp;
 import { merge as _merge } from 'lodash';
@@ -146,6 +146,15 @@ export class AngularXUserService {
         return (!standardFields.includes(fieldName) && !extraFields.includes(fieldName));
     }
 
+    handleError(errorResponse) {
+        let error = errorResponse.error;
+        if (typeof error === 'string') return throwError(error);
+        else if (typeof error === 'object') {
+            if ('error' in error) return throwError(error.error);
+            else return throwError(error);
+        }
+    }
+
     getUsers(forceRefresh: boolean = false) {
         if (this._gotUsers) {
             //Already fetched
@@ -156,12 +165,7 @@ export class AngularXUserService {
 
         this._gotUsers = true;
         return this._http.get(this._http.getAPIEndpoint('/users')).pipe(
-            map((data) => {
-                if ('error' in data)
-                    throw new Error((data as any).error);
-
-                return data;
-            }),
+            catchError(error => this.handleError(error)),
             tap((data) => {
                 this.processUserInitData(data);
             }),
@@ -182,15 +186,7 @@ export class AngularXUserService {
         }
 
         return this._http.get(this._http.getAPIEndpoint('/user/' + uid)).pipe(
-            map((data) => {
-                if ('error' in data)
-                    throw new Error((data as any).error);
-
-                if (!(data as any).data || !(data as any).authData)
-                    throw new Error('Invalid response received from server. Cannot find `data` and `authData`.');
-
-                return data;
-            }),
+            catchError(error => this.handleError(error)),
             tap(responseData => {
                 //responseData must contain authData &data
                 let data = (responseData as any).data;
@@ -228,12 +224,7 @@ export class AngularXUserService {
 
     updateUser(uid: string, data: JSONObject) {
         return this._http.patch(this._http.getAPIEndpoint('/user/' + uid), data).pipe(
-            map((data) => {
-                if ('error' in data)
-                    throw new Error((data as any).error);
-
-                return data;
-            }),
+            catchError(error => this.handleError(error)),
             tap(responseData => {
                 if ((responseData as any).data !== undefined) {
                     //Operation succeeded, update cache
@@ -279,12 +270,7 @@ export class AngularXUserService {
         }
 
         return this._http.post(this._http.getAPIEndpoint('/user/'), data).pipe(
-            map((data) => {
-                if ('error' in data)
-                    throw new Error((data as any).error);
-
-                return data;
-            }),
+            catchError(error => this.handleError(error)),
             tap(responseData => {
                 if ((responseData as any).data !== undefined && (responseData as any).data.uid) {
                     //Operation succeeded, update cache
