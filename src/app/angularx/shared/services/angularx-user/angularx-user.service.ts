@@ -71,13 +71,22 @@ export class AngularXUserService {
     }
 
     getCurrentUserId() {
+        //If _currentUserId existed, just return it
+        if (!!this._currentUserId) return this._currentUserId;
+
+        //If not, try to obtain it from Firebase Auth
+        let firebase = this._firebaseCore.getFirebaseInstance();
+        let firebaseCurrentUser = firebase.auth().currentUser;
+
+        if (!firebaseCurrentUser) return this._currentUserId;
+    
+        this._currentUserId = firebaseCurrentUser.uid;
         return this._currentUserId;
     }
 
     getCurrentUser() {
-
         //Current user is set
-        if (this._currentUserId !== null) return this.getUser(this._currentUserId);
+        if (!!this._users[this._currentUserId]) return this.getUser(this._currentUserId);
         
         //Current is not set, check if the user is logged in
         let firebase = this._firebaseCore.getFirebaseInstance();
@@ -88,7 +97,6 @@ export class AngularXUserService {
 
         let uid = firebaseCurrentUser.uid;
         return this.getUser(uid, true, true); //Let getUser() know that this is the current user
-
     }
 
     isObject(item) {
