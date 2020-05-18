@@ -70,6 +70,10 @@ export class AngularXUserService {
     constructor(private _http: AngularXHTTPService, private _firebaseCore: FirebaseCoreService) {
     }
 
+    getCurrentUserId() {
+        return this._currentUserId;
+    }
+
     getCurrentUser() {
 
         //Current user is set
