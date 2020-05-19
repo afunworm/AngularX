@@ -12,7 +12,7 @@ body {
     margin-top: -10%;
 }
 
-.logo {
+.firebaseui .logo {
     max-height: 180px;
 }
 
@@ -25,26 +25,26 @@ body {
     margin-bottom: 50px;
 }
 
-form {
+.firebaseui form {
     text-align: center;
 }
 
-.mat-form-field--inline {
+.firebaseui .mat-form-field--inline {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.mat-form-field--inline .mat-form-field {
+.firebaseui .mat-form-field--inline .mat-form-field {
     display: inline-block;
     width: 100%;
     vertical-align: middle;
 }
 
-.mat-form-field {
+.firebaseui .mat-form-field {
     margin-right: 11px;
 }
 
-button[type=submit] {
+.firebaseui button[type=submit] {
     text-transform: uppercase;
 }
