@@ -36,6 +36,10 @@ export class FirebaseCoreService implements FirebaseCore {
         return firebase;
     }
 
+    getFirestoreInstance() {
+        return firebase.firestore();
+    }
+
     setPersistence() {
         // return firebase.auth().setPersistence(firebase.auth.Auth.Persistence[environment.angularx.authStatePersistence]);
     }
