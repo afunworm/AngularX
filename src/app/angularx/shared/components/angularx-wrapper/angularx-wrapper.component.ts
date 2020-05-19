@@ -40,6 +40,7 @@ export class AngularxWrapperComponent implements OnInit {
             overflow: 'hidden',
             width: this.width,
             padding: this.padding,
+            textAlign: this.contentAlign,
             contentAlign: this.contentAlign,
             borderRadius: this.borderRadius
         }
