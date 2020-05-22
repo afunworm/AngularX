@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { pickBy as _pickBy, forEach as _forEach } from 'lodash';
 import { AngularXDialogService } from '../../../shared/services/angularx-dialog/angularx-dialog.service';
 import { AngularXLoadingService } from '../../../shared/services/angularx-loading/angularx-loading.service';
+import { FirebaseStorageService } from '../../../shared/services/firebase/firebase-storage.service';
 
 @Component({
     selector: 'angularx-edit-user-detail',
@@ -37,7 +38,7 @@ export class EditUserDetailComponent implements OnInit {
                 private _userService: AngularXUserService,
                 private _router: Router,
                 private _activatedRoute: ActivatedRoute,
-                private _afStorage: AngularFireStorage,
+                private _storageService: FirebaseStorageService,
                 private _dialogService: AngularXDialogService,
                 private _loadingService: AngularXLoadingService) { }
 
@@ -228,37 +229,37 @@ export class EditUserDetailComponent implements OnInit {
     onFileSelected($event, form: NgForm) {
 
         const file = $event.target.files[0];
-        const fileName = file.name;
-        const filePath = fileName + '_' + +(new Date());
-        const fileType = file.type;
-        const fileRef = this._afStorage.ref(filePath);
-        const task = this._afStorage.upload(filePath, file);
-
-        if (!['image/gif', 'image/jpeg', 'image/png', 'image/jpg'].includes(fileType)) {
-            alert('Invalid image.');
-            return;
-        }
 
         this.isUploading = true;
-        this.tempLocation = fileName;
+        this.tempLocation = file.name;
 
-        //Uploading progress
-        task.percentageChanges().subscribe(progress => {
-            //progress doesn't have %
+        //Upload file
+        this._storageService.upload(
+            file,
+            { _ownedBy: this._userService.getCurrentUserId() },
+            ['image/gif', 'image/jpeg', 'image/png', 'image/jpg']
+        );
+
+        //Monitor progress
+        this._storageService.progress.subscribe(progress => {
             this.uploadingProgress = progress;
         });
 
-        //Upload is completed
-        task.snapshotChanges().pipe(
-            finalize(() => {
-                fileRef.getDownloadURL().subscribe(url => {
-                    this.userData.photoURL = url;
-                    this.tempLocation = 'Photo uploaded successfully';
-                    this.isUploading = false;
-                    form.control.markAsDirty();
-                });
+        //DownloadURL is only available when the upload completed successfully
+        this._storageService.downloadURL.subscribe(url => {
+            if (!!url) {
+                this.userData.photoURL = url;
+                this.tempLocation = 'Photo uploaded successfully';
+                this.isUploading = false;
+                form.control.markAsDirty();
             }
-        )).subscribe();
+        });
+
+        //Monitor error
+        this._storageService.error.subscribe(error => {
+            if (!!error) this._dialogService.alert(error);
+        });
+
     }
 
     updatePhotoURLData(form: NgForm) {

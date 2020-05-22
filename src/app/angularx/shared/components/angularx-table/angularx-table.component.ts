@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { AngularXEventService } from '../angularx-event/angularx-event.service';
+import { AngularXEventService } from '../../services/angularx-event/angularx-event.service';
 import { merge as _merge } from 'lodash';
 
 export interface AngularXTableDataEntry {

@@ -20,7 +20,7 @@ import { DashboardComponent as AngularXDashboardComponent } from './angularx/adm
 import { FormsModule } from '@angular/forms';
 import { UsersComponent as AngularXUsersComponent, UserDialog } from './angularx/admin/users/users.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AngularXTableComponent } from './angularx/shared/services/angularx-table/angularx-table.component';
+import { AngularXTableComponent } from './angularx/shared/components/angularx-table/angularx-table.component';
 import { EditUserComponent } from './angularx/admin/edit-user/edit-user.component';
 import { UserComponent } from './angularx/admin/user/user.component';
 import { AngularXInterceptorService } from './angularx/shared/services/angularx-interceptor/angularx-interceptor.service';

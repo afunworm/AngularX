@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { AngularXUserService } from '../../shared/services/angularx-user/angularx-user.service';
-import { AngularXTableData } from '../../shared/services/angularx-table/angularx-table.component';
+import { AngularXTableData } from '../../shared/components/angularx-table/angularx-table.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularXEventService } from '../../shared/services/angularx-event/angularx-event.service';
 import { AngularXDialogService } from '../../shared/services/angularx-dialog/angularx-dialog.service';

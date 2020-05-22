@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { AngularXTableData } from '../../shared/services/angularx-table/angularx-table.component';
+import { AngularXTableData } from '../../shared/components/angularx-table/angularx-table.component';
 import { AngularXUserService, UsersDataInterface } from '../../shared/services/angularx-user/angularx-user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AngularXDialogService } from '../../shared/services/angularx-dialog/angularx-dialog.service';
