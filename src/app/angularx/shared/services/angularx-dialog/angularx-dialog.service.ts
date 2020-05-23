@@ -26,7 +26,7 @@ export class AngularXDialogService {
             title: type === 'alert' ? 'Alert' : 'Confirmation',
             message: '',
             cancelButton: { color: 'default', text: 'Cancel' },
-            okButton: { color: 'default', text: 'Done' }
+            okButton: { color: 'default', text: type === 'alert' ? 'Done' : 'OK' }
         }
 
         if (typeof configs === 'string') configs = _merge(configDefault, { message: configs });
