@@ -86,6 +86,9 @@ export class FirebaseStorageService {
         //Create fileId if not exists
         if (!('fileId' in metadata)) metadata.fileId = this.generateUniqueId();
 
+        //Integrate fileName to metadata
+        if (!('name' in metadata)) metadata.name = fileName;
+
         const task = fileRef.put(file, { customMetadata: metadata });
 
         task.on('state_changed', snapshot => {
