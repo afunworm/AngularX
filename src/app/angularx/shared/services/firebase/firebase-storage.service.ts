@@ -10,6 +10,7 @@ export class FirebaseStorageService {
     private _uploadProgress = new BehaviorSubject<number>(0);
     private _downloadURL = new BehaviorSubject<string | null>(null);
     private _uploadError = new BehaviorSubject<any>(null);
+    private errorCount: number = 0;
 
     constructor(private _afStorage: AngularFireStorage,
                 _firebaseCore: FirebaseCoreService) {
@@ -32,6 +33,11 @@ export class FirebaseStorageService {
         return this._uploadError;
     }
 
+    throwError(error) {
+        if (this.errorCount === 0) //Prevent duplication
+            this._uploadError.next(error);
+    }
+
     private generateUniqueId(maxLength: number = 28) {
 
         let random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
@@ -45,24 +51,37 @@ export class FirebaseStorageService {
         return result;
     }
 
-    upload(file, metadata: {[name: string]: string} = {}, contentTypeEnforce: string[] | string | null = null): void {
+    resetServiceInfo() {
+        this.errorCount = 0;
+        this._uploadProgress.next(0);
+        this._downloadURL.next(null);
+        this._uploadError.next(null);
+    }
+
+    upload(file, metadata: {[name: string]: string} = {}, extensionEnforce: string[] | string | null = null, contentTypeEnforce: string[] | string | null = null): void {
 
         const fileName = file.name;
+        const fileExtension = fileName.split('.').pop();
         const filePath = 'AngularX/ ' + +(new Date()) + '_' + fileName;
         const fileType = file.type; //image/png, etc
         const fileRef = this._storage.ref().child(filePath);
 
         //Content-Type enforce
         if (Array.isArray(contentTypeEnforce)) {
-            if (!contentTypeEnforce.includes(fileType)) return this._uploadError.next('Invalid file type.');
+            if (!contentTypeEnforce.includes(fileType)) return this.throwError('Invalid content-type.');
         } else if (typeof contentTypeEnforce === 'string') {
-            if (!fileType.startsWith(contentTypeEnforce)) return this._uploadError.next('Invalid file type.');
+            if (!fileType.startsWith(contentTypeEnforce)) return this.throwError('Invalid content-type.');
+        }
+
+        //Extension enforce
+        if (Array.isArray(extensionEnforce)) {
+            if (!extensionEnforce.map(ext => ext.replace('.', '')).includes(fileExtension)) return this.throwError('Invalid file type.');
+        } else if (typeof extensionEnforce === 'string') {
+            if (extensionEnforce.replace('.', '') !== fileExtension) return this.throwError('Invalid file type.');
         }
 
         //Reset service info
-        this._uploadProgress.next(0);
-        this._downloadURL.next(null);
-        this._uploadError.next(null);
+        this.resetServiceInfo();
 
         //Create fileId if not exists
         if (!('fileId' in metadata)) metadata.fileId = this.generateUniqueId();
@@ -78,7 +97,7 @@ export class FirebaseStorageService {
 
         }, error => {
 
-            this._uploadError.next(error);
+            this.throwError(error);
 
         }, () => {
 
@@ -87,7 +106,7 @@ export class FirebaseStorageService {
             task.snapshot.ref.getDownloadURL().then(downloadURL => {
                 this._downloadURL.next(downloadURL);
             }).catch(error => {
-                this._uploadError.next(error);
+                this.throwError(error);
             });
 
         });

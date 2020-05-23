@@ -237,9 +237,8 @@ export class EditUserDetailComponent implements OnInit {
         this._storageService.upload(
             file,
             { _ownedBy: this._userService.getCurrentUserId() },
-            ['image/gif', 'image/jpeg', 'image/png', 'image/jpg']
+            ['gif', 'jpeg', 'png', 'jpg']
         );
-
         //Monitor progress
         this._storageService.progress.subscribe(progress => {
             this.uploadingProgress = progress;
@@ -258,6 +257,8 @@ export class EditUserDetailComponent implements OnInit {
         //Monitor error
         this._storageService.error.subscribe(error => {
             if (!!error) this._dialogService.alert(error);
+            this.isUploading = false;
+            this.tempLocation = '';
         });
 
     }
