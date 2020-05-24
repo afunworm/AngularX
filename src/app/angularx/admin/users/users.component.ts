@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { AngularXTableData } from '../../shared/components/angularx-table/angularx-table.component';
+import { AngularXTableDataSource, AngularXTableConfigs, AngularXTableDataEntry } from '../../shared/components/angularx-table/angularx-table.component';
 import { AngularXUserService, UsersDataInterface } from '../../shared/services/angularx-user/angularx-user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AngularXDialogService } from '../../shared/services/angularx-dialog/angularx-dialog.service';
@@ -44,6 +44,7 @@ export class UsersComponent implements OnInit {
                 this.userData[uid].phoneNumber = currentUser.phoneNumber ? currentUser.phoneNumber : 'Unknown';
                 this.userData[uid].email = currentUser.email ? currentUser.email : 'Unknown';
                 this.userData[uid].displayName = currentUser.displayName ? currentUser.displayName : 'No Name Provided';
+                this.userData[uid].photoURL = currentUser.photoURL ? currentUser.photoURL : 'assets/images/default_profile.jpg';
             }
 
             //Hide loading message
@@ -61,32 +62,24 @@ export class UsersComponent implements OnInit {
 
     convertToDialogData(userData) {
 
-        let data: {extra: AngularXTableData, standard: AngularXTableData, custom: AngularXTableData, original: any, infoType: 'standard' | 'extra' | 'custom' } = {
-            extra: {
-                data: [], configs: {
-                    displayedRows: ['lastSignInTime', 'creationTime']
+        let data = {
+            original: userData, infoType: 'standard',
+            standardData: [],
+            standardDataConfigs: {},
+            standardDataDisplayedRows: ['firstName', 'lastName', 'displayName', 'email', 'phoneNumber', 'dob', 'photoURL'],
+            extraData: [],
+            extraDataConfigs: {},
+            extraDataDisplayedRows:['lastSignInTime', 'creationTime'],
+            customData: [],
+            customDataConfigs:  {
+                nameField: {
+                    styles: { textTransform: 'none' }
+                },
+                valueField: {
+                    styles: { textTransform: 'none' }
                 }
             },
-            standard: {
-                data: [], configs: {
-                    displayedRows: ['firstName', 'lastName', 'displayName', 'email', 'phoneNumber', 'dob', 'photoURL']
-                }
-            },
-            custom: {
-                data: [], configs: {
-                    nameField: {
-                        styles: {
-                            textTransform: 'none'
-                        }
-                    }, valueField: {
-                        styles: {
-                            textTransform: 'none'
-                        }
-                    }
-                } 
-            },
-            original: userData,
-            infoType: 'standard'
+            customDataDisplayedRows: []
         };
 
         let standardFields = this._userService.getFields('standard');
@@ -128,7 +121,7 @@ export class UsersComponent implements OnInit {
             //Convert DOB to string
             if (field === 'dob') entry.value = formatDOB(entry.value);
 
-            data.standard.data.push(entry);
+            data.standardData.push(entry);
         }
 
         //Extra field is only metadata
@@ -145,19 +138,18 @@ export class UsersComponent implements OnInit {
                 name: extraDict[key],
                 value: value
             };
-            data.extra.data.push(entry);
+            data.extraData.push(entry);
         }
 
         //Custom fields - anything that is not standard/extra
         for (let key in userData) {
             if (this._userService.isCustomField(key))
-                data.custom.data.push({
+            data.customData.push({
                     id: key,
                     name: key,
                     value: userData[key]
                 });
         }
-
         return data;
 
     }
@@ -169,6 +161,8 @@ export class UsersComponent implements OnInit {
 
         this._userService.getUser(uid).subscribe(userData => {
 
+            //Fix photoURL
+            if (!userData.photoURL || userData.photoURL === '') userData.photoURL = 'assets/images/default_profile.jpg';
             let data = this.convertToDialogData(userData);
             
             const dialogRef = this.dialog.open(UserDialog, {

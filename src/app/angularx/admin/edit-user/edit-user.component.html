@@ -51,7 +51,7 @@
 
 <div style="width: 100%;" align="center" *ngxIfPageLoaded="editMode">
     <div style="width: 800px;" align="left">
-        <angularx-table title="Standard Info" [data]="data.standard" [style]="{width: '900px', marginBottom: '32px'}"></angularx-table>
-        <angularx-table title="Custom Info" [data]="data.custom" [style]="{width: '900px'}"></angularx-table>
+        <angularx-table title="Standard Info" [dataSource]="standardData" [configs]="standardDataConfigs" [style]="{width: '900px', marginBottom: '32px'}"></angularx-table>
+        <angularx-table title="Custom Info" [dataSource]="customData" [configs]="customDataConfigs" [style]="{width: '900px'}"></angularx-table>
     </div>
 </div>    

@@ -54,15 +54,15 @@
     </div>
 
     <div style="padding: 0px 33px 0px 100px;" *ngIf="data.infoType == 'standard'">
-        <angularx-table [data]='data.standard'></angularx-table>
+        <angularx-table [dataSource]="data.standardData" [configs]="data.standardDataConfigs" [displayedRows]="data.standardDataDisplayedRows"></angularx-table>
     </div>
 
     <div style="padding: 0px 33px 0px 100px;" *ngIf="data.infoType == 'extra'">
-        <angularx-table [data]='data.extra'></angularx-table>
+        <angularx-table [dataSource]="data.extraData" [configs]="data.extraDataConfigs" [displayedRows]="data.extraDataDisplayedRows"></angularx-table>
     </div>
 
     <div style="padding: 0px 33px 0px 100px;" *ngIf="data.infoType == 'custom'">
-        <angularx-table [data]='data.custom'></angularx-table>
+        <angularx-table [dataSource]="data.customData" [configs]="data.customDataConfigs" [displayedRows]="data.customDataDisplayedRows"></angularx-table>
     </div>
 
 </div>

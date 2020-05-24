@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { AngularXEventService } from '../../services/angularx-event/angularx-event.service';
-import { merge as _merge } from 'lodash';
+import { merge as _merge, pickBy as _pickBy, values as _values } from 'lodash';
 
 export interface AngularXTableDataEntry {
     id: string,
@@ -17,43 +17,42 @@ export interface AngularXTableDataEntry {
     onRowClick?: {}
 }
 
-export interface AngularXTableData {
-    configs?: {
-        emitters?: {
-            onRowClick?: string,
-            onNameClick?: string,
-            onValueClick?: string
-        },
-        nameField?: {
-            classes?: string[] | string,
-            styles?: { [name: string]: string | number | boolean },
-            colspan?: number
-        },
-        valueField?: {
-            classes?: string[] | string,
-            styles?: { [name: string]: string | number | boolean },
-            colspan?: number
-        },
-        extraField?: {
-            classes?: string[] | string,
-            styles?: { [name: string]: string | number | boolean },
-            colspan?: number
-        },
-        entry?: {
-            classes?: string[] | string,
-            styles?: { [name: string]: string | number | boolean }
-        },
-        title?: {
-            text: string,
-            classes?: string[] | string,
-            styles?: { [name: string]: string | number | boolean }
-        }
-        //How tall should each entry is?
-        rowHeight?: number | string,
-        //What to show, in what order. If displayedRows is false, show all.
-        displayedRows?: string[] | boolean
+export interface AngularXTableDataSource {
+    [index: number]: AngularXTableDataEntry
+}
+
+export interface AngularXTableConfigs {
+    emitters?: {
+        onRowClick?: string,
+        onNameClick?: string,
+        onValueClick?: string
     },
-    data: AngularXTableDataEntry[]
+    nameField?: {
+        classes?: string[] | string,
+        styles?: { [name: string]: string | number | boolean },
+        colspan?: number
+    },
+    valueField?: {
+        classes?: string[] | string,
+        styles?: { [name: string]: string | number | boolean },
+        colspan?: number
+    },
+    extraField?: {
+        classes?: string[] | string,
+        styles?: { [name: string]: string | number | boolean },
+        colspan?: number
+    },
+    entry?: {
+        classes?: string[] | string,
+        styles?: { [name: string]: string | number | boolean }
+    },
+    title?: {
+        text: string,
+        classes?: string[] | string,
+        styles?: { [name: string]: string | number | boolean }
+    }
+    //How tall should each entry is?
+    rowHeight?: number | string
 }
 
 @Component({
@@ -64,11 +63,11 @@ export interface AngularXTableData {
 })
 export class AngularXTableComponent implements OnInit {
 
-    @Input('data') injectedData: AngularXTableData;
-    @Input('style') tableStyle;
-    @Input('title') title: string;
-    data;
-    configs;
+    @Input('dataSource') data: AngularXTableDataSource[] = [];
+    @Input('configs') configs: AngularXTableConfigs = {};
+    @Input('displayedRows') displayedRows: string[] = []; //What to show, in what order. If displayedRows is false, show all
+    @Input('style') tableStyle = {};
+    @Input('title') title: string = '';
 
     constructor(private _eventService: AngularXEventService) {}
 
@@ -131,12 +130,9 @@ export class AngularXTableComponent implements OnInit {
 
     ngOnInit(): void {
 
-        let defaults = {
-            emitters: {
-                onRowClick: 'onRowClick',
-                onNameClick: 'onNameClick',
-                onValueClick: 'onValueClick'
-            },
+        //Configs
+        let defaultConfigs = {
+            emitters: { onRowClick: 'onRowClick', onNameClick: 'onNameClick', onValueClick: 'onValueClick' },
             colspan: {name: 2, value: 4, extra: 1},
             nameField: {
                 classes: [], colspan: 2,
@@ -156,7 +152,6 @@ export class AngularXTableComponent implements OnInit {
                 }
             },
             title: {
-                text: '',
                 classes: 'mat-h2',
                 styles: {
                     paddingTop: '10px',
@@ -164,14 +159,9 @@ export class AngularXTableComponent implements OnInit {
                     paddingRight: '21px'
                 }
             },
-            rowHeight: 48,
-            displayedRows: false
+            rowHeight: 48
         };
-
-        //Merge @Input('title') to configs.title.text
-        defaults.title.text = this.title;
-
-        this.configs = _merge(defaults, this.injectedData.configs);
+        this.configs = _merge(defaultConfigs, this.configs);
 
         //Convert class array to class string
         ['nameField', 'valueField', 'extraField', 'entry', 'title'].forEach(fieldName => {
@@ -181,19 +171,23 @@ export class AngularXTableComponent implements OnInit {
         });
 
         //Process displayedRows
-        if (this.configs.displayedRows === false) {
-            this.data = this.injectedData.data;
+        if (this.displayedRows.length === 0) {
+            //Display everything
             return;
         }
 
         let data = [];
-        let originalData = this.injectedData.data;
+        let originalData = this.data;
 
-        for (let i = 0; i < this.configs.displayedRows.length; i++) {
-            let currentId = this.configs.displayedRows[i];
+        for (let i = 0; i < this.displayedRows.length; i++) {
+            let currentDisplayedRowId = this.displayedRows[i];
+            let entry = _values(
+                _pickBy(originalData, (entry, index) => {
+                    return entry.id === currentDisplayedRowId;
+                })
+            )
 
-            if (this.getEntryById(currentId, originalData) !== false)
-                data.push(this.getEntryById(currentId, originalData));
+            if (entry.length === 1) data.push(entry[0]);
         }
         this.data = data;
 

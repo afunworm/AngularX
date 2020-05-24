@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { AngularXUserService } from '../../shared/services/angularx-user/angularx-user.service';
-import { AngularXTableData } from '../../shared/components/angularx-table/angularx-table.component';
+import { AngularXTableDataSource, AngularXTableConfigs, AngularXTableDataEntry } from '../../shared/components/angularx-table/angularx-table.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularXEventService } from '../../shared/services/angularx-event/angularx-event.service';
 import { AngularXDialogService } from '../../shared/services/angularx-dialog/angularx-dialog.service';
@@ -24,6 +24,23 @@ export class EditUserComponent implements OnInit {
     data = {
         standard: {},
         custom: {}
+    };
+    standardData: AngularXTableDataSource = [];
+    standardDataConfigs: AngularXTableConfigs = {
+        emitters: {
+            onRowClick: 'onClick' //Tell AngularXTable to emit event to 'onClick' (created above) on rowclick
+        }
+    };
+    standardDataDisplayedRows = ['firstName', 'lastName', 'displayName', 'email', 'emailVerified', 'phoneNumber', 'dob', 'photoURL'];
+    customData: AngularXTableDataSource = [];
+    customDataConfigs: AngularXTableConfigs = {
+        emitters: {
+            onRowClick: 'onClick' //Tell AngularXTable to emit event to 'onClick' (created above) on rowclick
+        }, nameField: {
+            styles: {
+                textTransform: 'none'
+            }
+        }
     };
 
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -101,34 +118,26 @@ export class EditUserComponent implements OnInit {
                     }
                 });
                 
-                let data: AngularXTableData = {
-                    data: [],
-                    configs: {
-                        emitters: {
-                            onRowClick: 'onClick' //Tell AngularXTable to emit event to 'onClick' (created above) on rowclick
-                        }
-                    }
-                };
-                
-                data.data.push({ id: 'emailVerified', name: 'Email Verification', value: userData.emailVerified });
-                data.data.push({ id: 'disabled', name: 'Status', value: userData.disabled });
-                data.data.push({
+                //Processing standard data
+                (this.standardData as Array<AngularXTableDataEntry>).push({ id: 'emailVerified', name: 'Email Verification', value: userData.emailVerified });
+                (this.standardData as Array<AngularXTableDataEntry>).push({ id: 'disabled', name: 'Status', value: userData.disabled });
+                (this.standardData as Array<AngularXTableDataEntry>).push({
                     id: 'firstName', name: 'First Name', value: userData.firstName,
                     onRowClick: {'navigate': ['name']}
                 });
-                data.data.push({
+                (this.standardData as Array<AngularXTableDataEntry>).push({
                     id: 'lastName', name: 'Last Name', value: userData.lastName,
                     onRowClick: {'navigate': ['name']}
                 });
-                data.data.push({
+                (this.standardData as Array<AngularXTableDataEntry>).push({
                     id: 'displayName', name: 'Display Name', value: userData.displayName,
                     onRowClick: {'navigate': ['name']}
                 });
-                data.data.push({
+                (this.standardData as Array<AngularXTableDataEntry>).push({
                     id: 'email', name: 'Email', value: userData.email,
                     onRowClick: {'navigate': ['email']}
                 });
-                data.data.push({
+                (this.standardData as Array<AngularXTableDataEntry>).push({
                     id: 'phoneNumber', name: 'Phone Number', value: userData.phoneNumber,
                     onRowClick: {'navigate': ['phoneNumber']}
                 });
@@ -141,60 +150,44 @@ export class EditUserComponent implements OnInit {
                     m = m < 10 ? '0' + m : m; d = d < 10 ? '0' + d: d;
                     return `${m}/${d}/${y}`;
                 }
-                data.data.push({
+                (this.standardData as Array<AngularXTableDataEntry>).push({
                     id: 'dob', name: 'Date of Birth', value: formatDOB(userData.dob),
                     onRowClick: {'navigate': ['dob']}
                 });
 
                 if (userData.photoURL) {
                     if (userData.photoURL.startsWith('http:') || userData.photoURL.startsWith('https:'))
-                        data.data.push({
+                        (this.standardData as Array<AngularXTableDataEntry>).push({
                             id: 'photoURL', name: 'Photo URL', value: userData.photoURL, isURL: true, openInNewWindow: true,
                             onRowClick: {'navigate': ['photoURL']}
                         });
                     else
-                        data.data.push({
+                        (this.standardData as Array<AngularXTableDataEntry>).push({
                             id: 'photoURL', name: 'Photo URL', value: userData.photoURL,
                             onRowClick: {'navigate': ['photoURL']}
                         });
                 } else {
-                    data.data.push({
+                    (this.standardData as Array<AngularXTableDataEntry>).push({
                         id: 'photoURL', name: 'Photo URL', value: userData.photoURL,
                         onRowClick: {'navigate': ['photoURL']}
                     });
                 }
 
-                data.configs.displayedRows = ['firstName', 'lastName', 'displayName', 'email', 'emailVerified', 'phoneNumber', 'dob', 'photoURL'];
-                this.data.standard = data;
-
                 //Custom data: Anything that is not standard data
-                data = {
-                    data: [],
-                    configs: {
-                        emitters: {
-                            onRowClick: 'onClick' //Tell AngularXTable to emit event to 'onClick' (created above) on rowclick
-                        }, nameField: {
-                            styles: {
-                                textTransform: 'none'
-                            }
-                        }
-                    }
-                };
                 let customFields = _pickBy(userData, (value, key) => this._userService.isCustomField(key));
                 if (Object.keys(customFields).length === 0) {
-                    data.data.push({
+                    (this.customData as Array<AngularXTableDataEntry>).push({
                         id: 'noInfo', name: 'NO CUSTOM INFO', value: 'No custom information found for this user. Click to add.',
                         onRowClick: {'navigate': ['custom']}
                     });
                 } else {
                     for (let key in customFields) {
-                        data.data.push({
+                        (this.customData as Array<AngularXTableDataEntry>).push({
                             id: key, name: key, value: userData[key],
                             onRowClick: {'navigate': ['custom']}
                         });
                     }
                 }
-                this.data.custom = data;
 
                 //Inform template that data has loaded
                 this._loadingService.pageLoaded();
