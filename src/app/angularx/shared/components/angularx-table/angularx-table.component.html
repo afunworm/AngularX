@@ -14,14 +14,14 @@
             <mat-grid-tile [colspan]="configs.nameField.colspan" [rowspan]="1"
                 [class]="configs.nameField.classes" [ngStyle]="configs.nameField.styles"
                 (click)="emitOnNameClick(entry.onNameClick)">
-                {{ entry.name }}
+                <div class="angularx-field-text">{{ entry.name }}</div>
             </mat-grid-tile>
 
             <!-- Data Value -->
             <mat-grid-tile [colspan]="configs.valueField.colspan" [rowspan]="1"
                 [class]="configs.valueField.classes" [ngStyle]="configs.valueField.styles"
                 (click)="emitOnValueClick(entry.onValueClick)">
-                <span [innerHTML]="processOutputValue(entry)" [style.whiteSpace]="entry.valueWrap ? 'normal' : 'nowrap'"></span>
+                <div class="angularx-field-text" [innerHTML]="processOutputValue(entry)" [style.whiteSpace]="entry.valueWrap ? 'normal' : 'nowrap'"></div>
             </mat-grid-tile>
 
             <!-- Extra Column -->

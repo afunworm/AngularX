@@ -17,15 +17,17 @@ $text: map-get($foreground, text);
     overflow-x: scroll;
 }
 
-.angularx-table .mat-grid-tile .mat-figure {
-    padding-top: 14px;
-    padding-left: 21px;
-    padding-right: 21px;
-    justify-content: start;
+.angularx-field-text {
+    width: 100%;
+    padding: 3px 21px 3px 21px;
 }
 
 .angularx-table .mat-grid-list:hover {
     background: mat-color($primary, lighter);
+}
+
+.angularx-table .mat-grid-list:first-:first-child {
+    background: transparent;
 }
 
 .angularx-table a {

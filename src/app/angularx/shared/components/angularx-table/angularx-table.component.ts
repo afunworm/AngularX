@@ -58,8 +58,7 @@ export interface AngularXTableConfigs {
 @Component({
     selector: 'angularx-table',
     templateUrl: './angularx-table.component.html',
-    styleUrls: ['./angularx-table.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./angularx-table.component.scss']
 })
 export class AngularXTableComponent implements OnInit {
 
@@ -89,18 +88,18 @@ export class AngularXTableComponent implements OnInit {
 
         if (typeof entry.value !== 'string') {
             try {
-                return JSON.stringify(entry.value)
+                return '<div class="angularx-field-text">' + JSON.stringify(entry.value) + '</div>';
             } catch (error) {
-                return '';
+                return '<div class="angularx-field-text"></div>';
             }
         }
 
-        if (!entry.isURL) return entry.value;
+        if (!entry.isURL) return '<div class="angularx-field-text">' + entry.value + '</div>';
 
         if (entry.openInNewWindow) {
-            return `<a href="${entry.value}" target="_BLANK">${entry.value}</a>`;
+            return `<div class="angularx-field-text"><a href="${entry.value}" target="_BLANK">${entry.value}</a></div>`;
         } else {
-            return `<a href="${entry.value}">${entry.value}</a>`;
+            return `<div class="angularx-field-text"><a href="${entry.value}">${entry.value}</a></div>`;
         }
     }
 

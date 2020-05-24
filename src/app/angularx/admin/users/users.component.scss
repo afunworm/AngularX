@@ -7,9 +7,3 @@ $primary: map-get($theme, primary);
 .cdk-overlay-dark-backdrop {
     background: rgba(0, 0, 0, 0.77) !important;
 }
-
-/* For dialog's CSS */
-.mat-grid-tile .mat-figure {
-    justify-content: flex-start !important ;
-    align-items: flex-start !important;
-}
