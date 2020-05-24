@@ -67,6 +67,8 @@ export class AngularXTableComponent implements OnInit {
     @Input('displayedRows') displayedRows: string[] = []; //What to show, in what order. If displayedRows is false, show all
     @Input('style') tableStyle = {};
     @Input('title') title: string = '';
+    @Input('elevation') elevation: number = 5;
+    @Input('hovered') hovered: boolean = true;
 
     constructor(private _eventService: AngularXEventService) {}
 
@@ -128,6 +130,9 @@ export class AngularXTableComponent implements OnInit {
     }
 
     ngOnInit(): void {
+
+        //Elevation level must be 0 - 24
+        if (this.elevation < 0 || this.elevation > 24) this.elevation = 5;
 
         //Configs
         let defaultConfigs = {

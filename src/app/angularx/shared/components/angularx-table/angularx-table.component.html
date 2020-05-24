@@ -1,4 +1,4 @@
-<div class="angularx-table angularx-table-wrapper mat-elevation-z5" [ngStyle]="tableStyle">
+<div [class]="'angularx-table angularx-table-wrapper mat-elevation-z' + elevation + (hovered ? ' hovered' : '' )" [ngStyle]="tableStyle">
 
     <h2 *ngIf="title && title !== ''" [class]="configs.title.classes" [ngStyle]="configs.title.styles">{{ title }}</h2>
 

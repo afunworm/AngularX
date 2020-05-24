@@ -22,7 +22,7 @@ $text: map-get($foreground, text);
     padding: 3px 21px 3px 21px;
 }
 
-.angularx-table .mat-grid-list:hover {
+.angularx-table.hovered .mat-grid-list:hover {
     background: mat-color($primary, lighter);
 }
 
