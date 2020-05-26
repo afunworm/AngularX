@@ -10,9 +10,20 @@ import { NgForm } from '@angular/forms';
 })
 export class DashboardComponent implements OnInit {
 
+    data;
+
     constructor(private _dialogService: AngularXDialogService, private _loadingService: AngularXLoadingService) {}
 
     ngOnInit(): void {
+        this.data = [
+            { date: new Date(), title: 'Event #1', content: 'ContLorem ipsum dolor sit, amet consectetur adipisicing elit. Obcaecati quo commodi aspernatur maxime. Facere magnam aliquam vitae commodi quos odio suscipit provident in, repellat obcaecati repudiandae nam quis unde cupiditate! Velit similique consequatur quod esse asperiores cum voluptate odit harum temporibus eos? Fuga dignissimos dolor itaque aliquam perspiciatis neque facilis?ent' },
+            { date: new Date(), title: 'Event #2', content: 'ContLorem ipsum dolor sit, amet consectetur adipisicing elit. Obcaecati quo commodi aspernatur maxime. Facere magnam aliquam vitae commodi quos odio suscipit provident in, repellat obcaecati repudiandae nam quis unde cupiditate! Velit similique consequatur quod esse asperiores cum voluptate odit harum temporibus eos? Fuga dignissimos dolor itaque aliquam perspiciatis neque facilis?ent' },
+
+            { title: '01/01/2020' },
+        
+            { date: new Date(), title: 'Event #1', content: 'ContLorem ipsum dolor sit, amet consectetur adipisicing elit. Obcaecati quo commodi aspernatur maxime. Facere magnam aliquam vitae commodi quos odio suscipit provident in, repellat obcaecati repudiandae nam quis unde cupiditate! Velit similique consequatur quod esse asperiores cum voluptate odit harum temporibus eos? Fuga dignissimos dolor itaque aliquam perspiciatis neque facilis?ent' },
+            { date: new Date(), title: 'Event #2', content: 'ContLorem ipsum dolor sit, amet consectetur adipisicing elit. Obcaecati quo commodi aspernatur maxime. Facere magnam aliquam vitae commodi quos odio suscipit provident in, repellat obcaecati repudiandae nam quis unde cupiditate! Velit similique consequatur quod esse asperiores cum voluptate odit harum temporibus eos? Fuga dignissimos dolor itaque aliquam perspiciatis neque facilis?ent' }
+        ];
         this._loadingService.pageLoaded();
     }
 

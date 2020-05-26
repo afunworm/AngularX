@@ -1,44 +1,46 @@
 @import '~@angular/material/theming';
-@include mat-core();
-@import '../../../theming/variables.scss';
 
-$primary: map-get($theme, primary);
-$foreground: map-get($theme, foreground);
-$text: map-get($foreground, text);
+@mixin angularx-table-theme($theme) {
 
-.angularx-table.angularx-table-wrapper {
-    overflow: hidden;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-bottom: 25px;
-}
+    $primary: map-get($theme, primary);
+    $foreground: map-get($theme, foreground);
+    $text: map-get($foreground, text);
 
-.angularx-table .mat-grid-tile {
-    overflow-x: scroll;
-}
+    .angularx-table.angularx-table-wrapper {
+        overflow: hidden;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+    }
 
-.angularx-field-text {
-    width: 100%;
-    padding: 3px 21px 3px 21px;
-}
+    .angularx-table .mat-grid-tile {
+        overflow-x: scroll;
+    }
 
-.angularx-table.hovered .mat-grid-list:hover {
-    background: mat-color($primary, lighter);
-}
+    .angularx-field-text {
+        width: 100%;
+        padding: 3px 21px 3px 21px;
+    }
 
-.angularx-table .mat-grid-list:first-:first-child {
-    background: transparent;
-}
+    .angularx-table.hovered .mat-grid-list:hover {
+        background: mat-color($primary, lighter);
+    }
 
-.angularx-table a {
-    color: mat-color($primary);
-}
+    .angularx-table .mat-grid-list:first-:first-child {
+        background: transparent;
+    }
 
-.angularx-table a:hover {
-    color: mat-color($primary);
-    text-decoration: none;
-}
+    .angularx-table a {
+        color: mat-color($primary);
+    }
 
-.angularx-table .mat-divider:last-child {
-    display: none;
+    .angularx-table a:hover {
+        color: mat-color($primary);
+        text-decoration: none;
+    }
+
+    .angularx-table .mat-divider:last-child {
+        display: none;
+    }
+
 }

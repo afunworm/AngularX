@@ -1,5 +1,12 @@
+//Import for Angular Material
 @import '~@angular/material/theming';
 @include mat-core();
+
+//AngularX Table
+@import '../shared/components/angularx-table/angularx-table.component.scss';
+
+//AngularX Timeline
+@import '../shared/components/angularx-timeline/angularx-timeline.component.scss';
 
 //Define palettes
 //mat-palette(color, default, lighter, darker)
@@ -16,4 +23,7 @@ $background: map-get($theme, background);
 $background: map_merge($background, (background: $background-color));
 $theme: map_merge($theme, (background: $background));
 
+//Theme build
 @include angular-material-theme($theme);
+@include angularx-table-theme($theme);
+@include angularx-timeline-theme($theme);

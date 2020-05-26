@@ -32,6 +32,7 @@ import { AngularxLoadingComponent } from './angularx/shared/services/angularx-lo
 import { NgxInputDirective } from './angularx/shared/directives/ngx-input.directive';
 import { AngularxWrapperComponent } from './angularx/shared/components/angularx-wrapper/angularx-wrapper.component';
 import { NgxIfPageLoadedDirective } from './angularx/shared/directives/ngx-if-page-loaded.directive';
+import { AngularXTimelineComponent } from './angularx/shared/components/angularx-timeline/angularx-timeline.component';
 
 @NgModule({
     declarations: [
@@ -49,7 +50,8 @@ import { NgxIfPageLoadedDirective } from './angularx/shared/directives/ngx-if-pa
         AngularxLoadingComponent,
         NgxInputDirective,
         AngularxWrapperComponent,
-        NgxIfPageLoadedDirective
+        NgxIfPageLoadedDirective,
+        AngularXTimelineComponent
     ],
     imports: [
         BrowserModule,
