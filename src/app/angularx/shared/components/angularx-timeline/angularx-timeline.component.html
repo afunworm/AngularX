@@ -12,7 +12,7 @@
         <!-- Full Entry -->
         <div class="timeline-content" *ngIf="!isTitleOnly(entry)">
             <h2 class="timeline-title">{{ entry.title }}</h2>
-            {{ entry.content }}
+            <div [innerHTML]="entry.content"></div>
         </div>
     </li>
 
