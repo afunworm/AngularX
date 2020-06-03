@@ -64,18 +64,22 @@ export class NgxInputDirective implements OnInit {
      *-------------------------------------------------------*/
     @HostListener('keyup', ['$event'])
     formatToType($event: KeyboardEvent) {
-
         let value = this._elementRef.nativeElement.value;
         let type = this.type;
 
-        if (!this.isModifierKey($event) && type !== 'tel' && type !== 'ssn') return;
+        //Only work with tel & ssn
+        if (type !== 'tel' && type !== 'ssn') return;
+
+        //Ignore if key is modifier
+        if (!this.isModifierKey($event)) return;
 
         let result = this.formatInput(value, type);
         this._ngControl.control.setValue(result);
-        // this._renderer.setProperty(this._elementRef.nativeElement, 'value', result);
-
     }
     subscribeToValueChanges() {
+        //Only subscribe to ssn & tel for auto formatting
+        if (this.type !== 'ssn' && this.type !== 'tel') return;
+
         this._model.valueChanges.subscribe(value => {
             if (value === this._oldValue) return; //Avoid infinite loop
             this._oldValue = value;

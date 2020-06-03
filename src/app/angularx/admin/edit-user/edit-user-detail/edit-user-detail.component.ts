@@ -233,12 +233,9 @@ export class EditUserDetailComponent implements OnInit {
         this.isUploading = true;
         this.tempLocation = file.name;
 
-        //Upload file
-        this._storageService.upload(
-            file,
-            { _ownedBy: this._userService.getCurrentUserId() },
-            ['gif', 'jpeg', 'png', 'jpg']
-        );
+        //Always init storage service
+        this._storageService.init();
+
         //Monitor progress
         this._storageService.progress.subscribe(progress => {
             this.uploadingProgress = progress;
@@ -260,6 +257,13 @@ export class EditUserDetailComponent implements OnInit {
             this.isUploading = false;
             this.tempLocation = '';
         });
+
+        //Upload file
+        this._storageService.upload(
+            file,
+            { _ownedBy: this._userService.getCurrentUserId() },
+            ['gif', 'jpeg', 'png', 'jpg']
+        );
 
     }
 
